@@ -78,11 +78,11 @@ pipe.apply('hello', [
 ```
 
 ```js
-pipe(
+pipe.apply(' hello ', [
 	$.trim, // x => x.trim()
 	capitalize,
 	$[0], // x => x[0]
-)(' hello ') // 'H'
+]) // 'H'
 ```
 
 Note, if `$.foo` is a method, it will always be invoked even no argument list was given.
@@ -90,9 +90,9 @@ In the rare case you want to get a function object, use `Reflect.get, [$, 'foo']
 
 Also support reusing other methods.
 ```js
-pipe(
+pipe.apply(document.all, [
 	$, Array.prototype.slice, [0, 10], // x => Array.prototype.slice.apply(x, [0, 10])
-)(document.all)
+])
 ```
 
 ## Use of `then`
@@ -100,7 +100,7 @@ pipe(
 ```js
 import {pipe, $} from 'my-pipe'
 
-let f = pipe(
+pipe.apply(promise, [
 	`then`,
 	doubleSay, [$, ' ~ '],
 	capitalize,
@@ -108,20 +108,18 @@ let f = pipe(
 	x => stream.write(x),
 	`then`,
 	console.log,
-)
-f(promise)
+])
 ```
 
 It could be seen the sugar of
 ```js
-let f = x => x
-	.then(pipe(
-		doubleSay, [$, ' ~ '],
-		capitalize,
-		exclaim,
-		x => stream.write(x),
-	))
-	.then(pipe(
-		console.log,
-	))
+promise.then(pipe.of(
+	doubleSay, [$, ' ~ '],
+	capitalize,
+	exclaim,
+	x => stream.write(x),
+))
+.then(pipe.of(
+	console.log,
+))
 ```
