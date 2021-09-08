@@ -1,3 +1,5 @@
+// unfinished...
+
 import {partial, $} from './3.js'
 
 const then = Symbol()
